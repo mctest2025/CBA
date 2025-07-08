@@ -1,9 +1,0 @@
-{
-  "name": "Cost Benefit Calculator",
-  "short_name": "CostCalc",
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#276ef1",
-  "icons": []
-}
