@@ -1,82 +1,37 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="theme-color" content="#ffffff"/>
-  <link rel="manifest" href="manifest.json"/>
-  <link rel="stylesheet" href="style.css"/>
   <title>Cost Benefit Calculator</title>
+  <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-  <main>
+  <div class="container">
     <h1>Cost Benefit Calculator</h1>
-
-    <section class="card">
-      <h2><span class="icon">👤</span> Staff Profile</h2>
+    <div class="card">
+      <h2>👥 Staff Profile</h2>
       <label>How many staff do you have?</label>
       <input type="number" id="staffCount" value="25"/>
-
       <label>What is the average annual salary (£)</label>
       <input type="number" id="annualSalary" value="30000"/>
-
       <button onclick="calculate()">Calculate</button>
-    </section>
+    </div>
 
-    <section class="card" id="results" style="display:none;">
-      <h2><span class="icon">📈</span> Results</h2>
-      <p>Total Days Absent <span id="daysAbsent"></span></p>
-      <p>Average Daily Salary <span id="dailySalary"></span></p>
-      <p>Absence Cost <span id="absenceCost"></span></p>
-      <p>Turnover Cost <span id="turnoverCost"></span></p>
-      <p>Therapy Cost <span id="therapyCost"></span></p>
-      <p>Potential Liability <span id="liability"></span></p>
-
+    <div class="card" id="results" style="display:none;">
+      <h2>📊 Results</h2>
+      <p>Total Days Absent: <span id="daysAbsent"></span></p>
+      <p>Average Daily Salary: £<span id="dailySalary"></span></p>
+      <p>Absence Cost: £<span id="absenceCost"></span></p>
+      <p>Turnover Cost: £<span id="turnoverCost"></span></p>
+      <p>Therapy Cost: £<span id="therapyCost"></span></p>
+      <p>Potential Liability: £<span id="liability"></span></p>
       <div class="highlight">
-        <strong>💰 Net Potential Saving: <span id="netSaving"></span></strong>
+        💰 Net Potential Saving: £<span id="netSaving"></span>
       </div>
-    </section>
-  </main>
-
-  <script>
-    function formatCurrency(value) {
-      return "£" + value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-    }
-
-    function calculate() {
-      const staff = Number(document.getElementById('staffCount').value);
-      const annualSalary = Number(document.getElementById('annualSalary').value);
-
-      const daysAbsentPerStaff = 4.4;
-      const coverMultiplier = 1.3;
-      const turnoverRate = 0.2;
-      const workingDays = 260;
-      const turnoverMultiplier = 1.1;
-      const therapyRate = 0.1;
-      const therapyCostPerCase = 80;
-      const pepm = 4.5;
-
-      const totalAbsentDays = staff * daysAbsentPerStaff;
-      const dailySalary = annualSalary / workingDays;
-
-      const absenceCost = staff * dailySalary * daysAbsentPerStaff * coverMultiplier;
-      const turnoverCost = staff * turnoverRate * workingDays * turnoverMultiplier;
-      const therapyCost = staff * therapyRate * therapyCostPerCase;
-
-      const liability = absenceCost + turnoverCost + therapyCost;
-      const planCost = staff * pepm * 12;
-      const saving = liability - planCost;
-
-      document.getElementById('daysAbsent').textContent = totalAbsentDays;
-      document.getElementById('dailySalary').textContent = formatCurrency(dailySalary);
-      document.getElementById('absenceCost').textContent = formatCurrency(absenceCost);
-      document.getElementById('turnoverCost').textContent = formatCurrency(turnoverCost);
-      document.getElementById('therapyCost').textContent = formatCurrency(therapyCost);
-      document.getElementById('liability').textContent = formatCurrency(liability);
-      document.getElementById('netSaving').textContent = formatCurrency(saving);
-
-      document.getElementById('results').style.display = 'block';
-    }
-  </script>
+    </div>
+  </div>
+  <script src="script.js"></script>
 </body>
 </html>
