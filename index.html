@@ -1,75 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="theme-color" content="#ffffff"/>
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="stylesheet" href="style.css"/>
   <title>Cost Benefit Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="manifest" href="manifest.json">
-  <style>
-    body { font-family: Arial, sans-serif; background: #f8fafc; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-    .card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); padding: 20px; margin-bottom: 20px; width: 100%; max-width: 500px; }
-    h1 { margin-bottom: 20px; font-size: 1.8rem; }
-    input, button { width: 100%; padding: 10px; margin: 10px 0; font-size: 1rem; }
-    label { font-weight: bold; display: block; margin-top: 10px; }
-    #result { font-size: 1rem; line-height: 1.6; }
-    .highlight { background: yellow; font-weight: bold; padding: 4px 8px; display: inline-block; margin-top: 10px; }
-    .section-title { font-size: 1.2rem; font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-    .icon { font-size: 1.2rem; }
-  </style>
 </head>
 <body>
+  <main>
+    <h1>Cost Benefit Calculator</h1>
 
-  <h1>Cost Benefit Calculator</h1>
+    <section class="card">
+      <h2><span class="icon">👤</span> Staff Profile</h2>
+      <label>How many staff do you have?</label>
+      <input type="number" id="staffCount" value="25"/>
 
-  <div class="card">
-    <div class="section-title"><span class="icon">👤</span>Staff Profile</div>
-    <label for="staffCount">How many staff do you have?</label>
-    <input type="number" id="staffCount" min="0" placeholder="e.g. 25">
+      <label>What is the average annual salary (£)</label>
+      <input type="number" id="annualSalary" value="30000"/>
 
-    <label for="avgSalary">What is the average annual salary (£)?</label>
-    <input type="number" id="avgSalary" min="0" placeholder="e.g. 30000">
+      <button onclick="calculate()">Calculate</button>
+    </section>
 
-    <button onclick="calculate()">Calculate</button>
-  </div>
+    <section class="card" id="results" style="display:none;">
+      <h2><span class="icon">📈</span> Results</h2>
+      <p>Total Days Absent <span id="daysAbsent"></span></p>
+      <p>Average Daily Salary <span id="dailySalary"></span></p>
+      <p>Absence Cost <span id="absenceCost"></span></p>
+      <p>Turnover Cost <span id="turnoverCost"></span></p>
+      <p>Therapy Cost <span id="therapyCost"></span></p>
+      <p>Potential Liability <span id="liability"></span></p>
 
-  <div class="card" id="resultCard" style="display:none;">
-    <div class="section-title"><span class="icon">📊</span>Results</div>
-    <div id="result"></div>
-  </div>
+      <div class="highlight">
+        <strong>💰 Net Potential Saving: <span id="netSaving"></span></strong>
+      </div>
+    </section>
+  </main>
 
   <script>
-    function calculate() {
-      const staff = parseInt(document.getElementById("staffCount").value);
-      const salary = parseFloat(document.getElementById("avgSalary").value);
-      if (isNaN(staff) || isNaN(salary)) {
-        alert("Please enter valid numbers for both inputs.");
-        return;
-      }
-
-      const dailySalary = salary / 260;
-      const totalAbsence = staff * 5.5;
-      const absenceCost = staff * dailySalary * 5.5 * 1.3;
-      const turnoverCost = staff * 0.35 * 260 * 1.5;
-      const therapyCost = staff * 0.03 * 120;
-      const potentialLiability = absenceCost + turnoverCost + therapyCost;
-      const planAnnualCost = staff * 1 * 12;
-      const netSavings = potentialLiability - planAnnualCost;
-
-      document.getElementById("resultCard").style.display = "block";
-      document.getElementById("result").innerHTML = `
-        Total Days Absent: ${totalAbsence}<br>
-        Average Daily Salary: £${dailySalary.toFixed(2)}<br>
-        Absence Cost: £${absenceCost.toLocaleString(undefined, {minimumFractionDigits: 2})}<br>
-        Turnover Cost: £${turnoverCost.toLocaleString(undefined, {minimumFractionDigits: 2})}<br>
-        Therapy Cost: £${therapyCost.toLocaleString(undefined, {minimumFractionDigits: 2})}<br>
-        Potential Liability: £${potentialLiability.toLocaleString(undefined, {minimumFractionDigits: 2})}<br>
-        Plan Annual Cost: £${planAnnualCost.toLocaleString(undefined, {minimumFractionDigits: 2})}<br>
-        <div class="highlight">💰 Net Potential Saving: £${netSavings.toLocaleString(undefined, {minimumFractionDigits: 2})}</div>
-      `;
+    function formatCurrency(value) {
+      return "£" + value.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
 
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js');
+    function calculate() {
+      const staff = Number(document.getElementById('staffCount').value);
+      const annualSalary = Number(document.getElementById('annualSalary').value);
+
+      const daysAbsentPerStaff = 4.4;
+      const coverMultiplier = 1.3;
+      const turnoverRate = 0.2;
+      const workingDays = 260;
+      const turnoverMultiplier = 1.1;
+      const therapyRate = 0.1;
+      const therapyCostPerCase = 80;
+      const pepm = 4.5;
+
+      const totalAbsentDays = staff * daysAbsentPerStaff;
+      const dailySalary = annualSalary / workingDays;
+
+      const absenceCost = staff * dailySalary * daysAbsentPerStaff * coverMultiplier;
+      const turnoverCost = staff * turnoverRate * workingDays * turnoverMultiplier;
+      const therapyCost = staff * therapyRate * therapyCostPerCase;
+
+      const liability = absenceCost + turnoverCost + therapyCost;
+      const planCost = staff * pepm * 12;
+      const saving = liability - planCost;
+
+      document.getElementById('daysAbsent').textContent = totalAbsentDays;
+      document.getElementById('dailySalary').textContent = formatCurrency(dailySalary);
+      document.getElementById('absenceCost').textContent = formatCurrency(absenceCost);
+      document.getElementById('turnoverCost').textContent = formatCurrency(turnoverCost);
+      document.getElementById('therapyCost').textContent = formatCurrency(therapyCost);
+      document.getElementById('liability').textContent = formatCurrency(liability);
+      document.getElementById('netSaving').textContent = formatCurrency(saving);
+
+      document.getElementById('results').style.display = 'block';
     }
   </script>
 </body>
