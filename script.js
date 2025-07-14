@@ -1,33 +1,34 @@
 
+function formatCurrency(value) {
+    return value.toLocaleString('en-UK', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
 function calculate() {
-  const staff = parseFloat(document.getElementById("staffCount").value);
-  const salary = parseFloat(document.getElementById("annualSalary").value);
+    const staffCount = parseFloat(document.getElementById('staffCount').value);
+    const avgSalary = parseFloat(document.getElementById('averageSalary').value);
 
-  const workingDays = 260;
-  const daysAbsentPerEmp = 5.5;
-  const turnoverRate = 0.35;
-  const turnoverMultiplier = 1.5;
-  const coverMultiplier = 1.3;
-  const therapyUtil = 0.03;
-  const therapyCostPerCase = 120;
+    const workingDays = 220;
+    const absenceRate = 0.025;
+    const turnoverRate = 0.08;
+    const therapyRate = 0.1;
+    const therapyCostPerCase = 36;
+    const pepmCost = 3;
 
-  const totalAbsent = staff * daysAbsentPerEmp;
-  const dailySalary = salary / workingDays;
-  const absenceCost = staff * dailySalary * daysAbsentPerEmp * coverMultiplier;
-  const turnoverCost = staff * turnoverRate * workingDays * turnoverMultiplier;
-  const therapyCost = staff * therapyUtil * therapyCostPerCase;
-  const liability = absenceCost + turnoverCost + therapyCost;
+    const daysAbsent = staffCount * workingDays * absenceRate;
+    const dailySalary = avgSalary / workingDays;
 
-  const planCost = staff * 1 * 12;
-  const saving = liability - planCost;
+    const absenceCost = daysAbsent * dailySalary;
+    const turnoverCost = staffCount * turnoverRate * avgSalary * 0.2;
+    const therapyCost = staffCount * therapyRate * therapyCostPerCase;
+    const potentialLiability = absenceCost + turnoverCost + therapyCost;
+    const planCost = staffCount * pepmCost * 12;
+    const netSaving = potentialLiability - planCost;
 
-  document.getElementById("daysAbsent").textContent = totalAbsent.toFixed(1);
-  document.getElementById("dailySalary").textContent = dailySalary.toFixed(2);
-  document.getElementById("absenceCost").textContent = absenceCost.toFixed(2);
-  document.getElementById("turnoverCost").textContent = turnoverCost.toFixed(2);
-  document.getElementById("therapyCost").textContent = therapyCost.toFixed(2);
-  document.getElementById("liability").textContent = liability.toFixed(2);
-  document.getElementById("netSaving").textContent = saving.toFixed(2);
-
-  document.getElementById("results").style.display = "block";
+    document.getElementById('daysAbsent').innerText = daysAbsent.toFixed(1);
+    document.getElementById('dailySalary').innerText = formatCurrency(dailySalary);
+    document.getElementById('absenceCost').innerText = formatCurrency(absenceCost);
+    document.getElementById('turnoverCost').innerText = formatCurrency(turnoverCost);
+    document.getElementById('therapyCost').innerText = formatCurrency(therapyCost);
+    document.getElementById('potentialLiability').innerText = formatCurrency(potentialLiability);
+    document.getElementById('netSaving').innerText = formatCurrency(netSaving);
 }

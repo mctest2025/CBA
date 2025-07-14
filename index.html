@@ -2,36 +2,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cost Benefit Calculator</title>
-  <link rel="stylesheet" href="styles.css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cost Benefit Calculator</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
     <h1>Cost Benefit Calculator</h1>
-    <div class="card">
-      <h2>👥 Staff Profile</h2>
-      <label>How many staff do you have?</label>
-      <input type="number" id="staffCount" value="25"/>
-      <label>What is the average annual salary (£)</label>
-      <input type="number" id="annualSalary" value="30000"/>
-      <button onclick="calculate()">Calculate</button>
+    <h2>brought to you by Findmy-Therapist.com</h2>
+    <div class="container">
+        <div class="section">
+            <h3>👥 Staff Profile</h3>
+            <label>How many staff do you have?</label>
+            <input type="number" id="staffCount" value="25">
+            <label>What is the average annual salary (£)</label>
+            <input type="number" id="averageSalary" value="30000">
+            <button onclick="calculate()">Calculate</button>
+        </div>
+        <div class="section results">
+            <h3>📊 Results</h3>
+            <p>Total Days Absent: <span id="daysAbsent">0</span></p>
+            <p>Average Daily Salary: £<span id="dailySalary">0</span></p>
+            <p>Absence Cost: £<span id="absenceCost">0</span></p>
+            <p>Turnover Cost: £<span id="turnoverCost">0</span></p>
+            <p>Therapy Cost: £<span id="therapyCost">0</span></p>
+            <p>Potential Liability: £<span id="potentialLiability">0</span></p>
+            <div class="highlight">
+                💰 <strong>Net Potential Saving:</strong> £<span id="netSaving">0</span>
+            </div>
+        </div>
+        <div class="footer">
+            <p><strong>For further information on how we can help your organisation make savings, please call our team 020 7459 4408 or email us: enquiries@findmy-therapist.com</strong></p>
+        </div>
     </div>
-
-    <div class="card" id="results" style="display:none;">
-      <h2>📊 Results</h2>
-      <p>Total Days Absent: <span id="daysAbsent"></span></p>
-      <p>Average Daily Salary: £<span id="dailySalary"></span></p>
-      <p>Absence Cost: £<span id="absenceCost"></span></p>
-      <p>Turnover Cost: £<span id="turnoverCost"></span></p>
-      <p>Therapy Cost: £<span id="therapyCost"></span></p>
-      <p>Potential Liability: £<span id="liability"></span></p>
-      <div class="highlight">
-        💰 Net Potential Saving: £<span id="netSaving"></span>
-      </div>
-    </div>
-  </div>
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
